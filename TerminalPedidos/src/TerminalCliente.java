@@ -1,11 +1,20 @@
+package com.senac.swing;
+
 
 import com.senac.ws.CardapioItem;
 import com.senac.ws.Cliente;
 import com.senac.ws.Pedido;
+import java.awt.Image;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 public class TerminalCliente extends javax.swing.JFrame {
+    private Cliente cliente;
 
     /**
      * Creates new form TerminalCliente
@@ -13,6 +22,16 @@ public class TerminalCliente extends javax.swing.JFrame {
     public TerminalCliente() {
         initComponents();
         setLocationRelativeTo(null);
+        
+        try {
+            Image i = ImageIO.read(getClass().getResource("img/french_fries.png"));
+            setIconImage(i);
+        } catch (IOException ex) {
+            Logger.getLogger(TerminalCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        btnPedido.setEnabled(false);
+        btnSair.setEnabled(false);
     }
     
 
@@ -33,16 +52,15 @@ public class TerminalCliente extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtSenha = new javax.swing.JPasswordField();
-        jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel4 = new javax.swing.JLabel();
-        btnCancelar = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
         btnOk = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtLog = new javax.swing.JTextArea();
         jSeparator3 = new javax.swing.JSeparator();
         btnPedido = new javax.swing.JButton();
+        lblMensagem = new javax.swing.JLabel();
+        lblImagem = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -69,8 +87,8 @@ public class TerminalCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Cardápio");
         setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        setResizable(false);
 
-        listCardapio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         listCardapio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane2.setViewportView(listCardapio);
 
@@ -78,17 +96,25 @@ public class TerminalCliente extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Matrícula:");
+        jLabel2.setFocusable(false);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Senha:");
+        jLabel3.setFocusable(false);
 
         txtSenha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Autenticação");
+        jLabel4.setFocusable(false);
 
-        btnCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnCancelar.setText("Cancelar");
+        btnSair.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         btnOk.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnOk.setText("OK");
@@ -98,15 +124,9 @@ public class TerminalCliente extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Opções do cardápio");
-
-        txtLog.setEditable(false);
-        txtLog.setColumns(20);
-        txtLog.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtLog.setRows(5);
-        txtLog.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Log", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
-        jScrollPane1.setViewportView(txtLog);
+        jLabel1.setFocusable(false);
 
         btnPedido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnPedido.setText("Fazer Pedido");
@@ -116,6 +136,17 @@ public class TerminalCliente extends javax.swing.JFrame {
             }
         });
 
+        lblMensagem.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblMensagem.setForeground(new java.awt.Color(51, 0, 153));
+        lblMensagem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMensagem.setFocusable(false);
+
+        lblImagem.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblImagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/senac/swing/img/fast_food.png"))); // NOI18N
+        lblImagem.setFocusable(false);
+        lblImagem.setMaximumSize(new java.awt.Dimension(200, 200));
+        lblImagem.setMinimumSize(new java.awt.Dimension(200, 200));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,105 +154,183 @@ public class TerminalCliente extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(4, 4, 4)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(txtSenha))))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(29, 29, 29))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtMatricula)
-                            .addComponent(txtSenha)))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jSeparator3)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnOk, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCancelar))
-                            .addComponent(btnPedido, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(lblMensagem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPedido, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jLabel4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnOk))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPedido)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnOk)
+                            .addComponent(btnSair))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(292, 292, 292)
+                                .addComponent(btnPedido))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblImagem, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        Cliente clienteRetorno;
         String matricula = txtMatricula.getText();
         String senha = new String(txtSenha.getPassword());
         DefaultListModel lista = new DefaultListModel();
-        List<CardapioItem> cardapio = autenticarCliente(Integer.parseInt(matricula), senha);
+        List<CardapioItem> cardapio = null;
         
-        for (CardapioItem item : cardapio) {
-            lista.addElement(item);
+        try {
+            consistirDados(matricula, senha);
+            
+            cardapio = autenticarCliente(Integer.parseInt(matricula), senha);
+            
+//            CardapioItem[] cardapioVec = new CardapioItem[cardapio.size()];
+//            cardapio.toArray(cardapioVec);
+            
+            for (CardapioItem item : cardapio) {
+                lista.addElement(item);
+            }
+
+//            listCardapio.setListData(cardapioVec);
+            listCardapio.setModel(lista);
+            
+            cliente = new Cliente();
+            cliente.setMatricula(Integer.parseInt(txtMatricula.getText()));
+            cliente.setSenha(new String(txtSenha.getPassword()));
+            clienteRetorno = buscarDadosCliente(cliente);
+            cliente = clienteRetorno;
+            
+            lblMensagem.setText("Bem vindo " + cliente.getNome() + ", faça seu pedido");
+            txtMatricula.setText("");
+            txtMatricula.setEnabled(false);
+            txtSenha.setText("");
+            txtSenha.setEnabled(false);
+            btnOk.setEnabled(false);
+            btnSair.setEnabled(true);
+            btnPedido.setEnabled(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        
-//        listCardapio.setListData(cardapio.toArray());
-        listCardapio.setModel(lista);
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidoActionPerformed
         Pedido pedido = new Pedido();
-        Cliente cliente = new Cliente();
-        Cliente clienteRetorno;
         
-        cliente.setMatricula(Integer.parseInt(txtMatricula.getText()));
-        cliente.setSenha(new String(txtSenha.getPassword()));
-   
-        clienteRetorno = buscarDadosCliente(cliente);
-        
-        pedido.setCliente(clienteRetorno);
-        
-        List<CardapioItem> itens = listCardapio.getSelectedValuesList();
-        
-        for (CardapioItem item : itens) {
-            pedido.getItensPedido().add(item);
+        try {
+            pedido.setCliente(cliente);
+
+            List<CardapioItem> itens = listCardapio.getSelectedValuesList();
+
+            for (CardapioItem item : itens) {
+                pedido.getItensPedido().add(item);
+            }
+            
+            enviarPedido(pedido);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }//GEN-LAST:event_btnPedidoActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        btnPedido.setEnabled(false);
+        btnSair.setEnabled(false);
+        txtMatricula.setEnabled(true);
+        txtSenha.setEnabled(true);
+        btnOk.setEnabled(true);
+        lblMensagem.setText("");
+        DefaultListModel listModel = (DefaultListModel) listCardapio.getModel();
+        listModel.removeAllElements();
+    }//GEN-LAST:event_btnSairActionPerformed
+    
+    private void consistirDados(String matricula, String senha) {
+        if (matricula.equals("")) {
+            throw new RuntimeException("O campo Matrícula deve ser informado");
         }
         
-        enviarPedido(pedido);
-    }//GEN-LAST:event_btnPedidoActionPerformed
+        if (senha.equals("")) {
+            throw new RuntimeException("O campo Senha deve ser informado.");
+        }
+    }
+    
+    private static java.util.List<com.senac.ws.CardapioItem> autenticarCliente(java.lang.Integer matricula, java.lang.String senha) {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.autenticarCliente(matricula, senha);
+    }
+
+    private static Cliente buscarDadosCliente(com.senac.ws.Cliente cliente) {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.buscarDadosCliente(cliente);
+    }
+
+    private static String enviarPedido(com.senac.ws.Pedido pedido) {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.enviarPedido(pedido);
+    }
     
     /**
      * @param args the command line arguments
@@ -260,42 +369,23 @@ public class TerminalCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnOk;
     private javax.swing.JButton btnPedido;
+    private javax.swing.JButton btnSair;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JFrame jFrame2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblImagem;
+    private javax.swing.JLabel lblMensagem;
     private javax.swing.JList<CardapioItem> listCardapio;
-    private javax.swing.JTextArea txtLog;
     private javax.swing.JTextField txtMatricula;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
-
-    private static java.util.List<com.senac.ws.CardapioItem> autenticarCliente(java.lang.Integer matricula, java.lang.String senha) {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        return port.autenticarCliente(matricula, senha);
-    }
-
-    private static Cliente buscarDadosCliente(com.senac.ws.Cliente cliente) {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        return port.buscarDadosCliente(cliente);
-    }
-
-    private static void enviarPedido(com.senac.ws.Pedido pedido) {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        port.enviarPedido(pedido);
-    }
 
 }
