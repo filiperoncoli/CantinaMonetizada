@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xs:schema xmlns:tns="http://ws.senac.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.senac.com/">
+
+<xs:element name="autenticarCliente" type="tns:autenticarCliente"/>
+
+<xs:element name="autenticarClienteResponse" type="tns:autenticarClienteResponse"/>
+
+<xs:element name="buscarDadosCliente" type="tns:buscarDadosCliente"/>
+
+<xs:element name="buscarDadosClienteResponse" type="tns:buscarDadosClienteResponse"/>
+
+<xs:element name="buscarFilaPedidos" type="tns:buscarFilaPedidos"/>
+
+<xs:element name="buscarFilaPedidosResponse" type="tns:buscarFilaPedidosResponse"/>
+
+<xs:element name="enviarPedido" type="tns:enviarPedido"/>
+
+<xs:element name="enviarPedidoResponse" type="tns:enviarPedidoResponse"/>
+
+<xs:element name="fecharPedido" type="tns:fecharPedido"/>
+
+<xs:element name="fecharPedidoResponse" type="tns:fecharPedidoResponse"/>
+
+<xs:element name="solicitarPedido" type="tns:solicitarPedido"/>
+
+<xs:element name="solicitarPedidoResponse" type="tns:solicitarPedidoResponse"/>
+
+<xs:complexType name="buscarDadosCliente">
+<xs:sequence>
+<xs:element name="cliente" type="tns:cliente" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cliente">
+<xs:sequence>
+<xs:element name="matricula" type="xs:int" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+<xs:element name="saldo" type="xs:double"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="buscarDadosClienteResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:cliente" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="buscarFilaPedidos">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="buscarFilaPedidosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:pedido" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pedido">
+<xs:sequence>
+<xs:element name="cliente" type="tns:cliente" minOccurs="0"/>
+<xs:element name="itensPedido" type="tns:cardapioItem" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="numero" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cardapioItem">
+<xs:sequence>
+<xs:element name="codigo" type="xs:int" minOccurs="0"/>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="valor" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="fecharPedido">
+<xs:sequence>
+<xs:element name="numeroPedido" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="fecharPedidoResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="autenticarCliente">
+<xs:sequence>
+<xs:element name="matricula" type="xs:int" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="autenticarClienteResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:cardapioItem" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enviarPedido">
+<xs:sequence>
+<xs:element name="pedido" type="tns:pedido" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enviarPedidoResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="solicitarPedido">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="solicitarPedidoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:pedido" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

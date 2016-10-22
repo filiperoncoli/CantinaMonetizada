@@ -25,7 +25,8 @@ public class ServidorCantinaWS {
     }
         
     @WebMethod(operationName = "autenticarCliente")
-    public List<CardapioItem> autenticarCliente(@WebParam(name = "matricula") Integer matricula, @WebParam(name = "senha") String senha) {
+    public List<CardapioItem> autenticarCliente(@WebParam(name = "matricula") Integer matricula, 
+            @WebParam(name = "senha") String senha) {
         boolean existe = false;
         
         for (Cliente c : clienteRN.pesquisar()) {
@@ -42,23 +43,37 @@ public class ServidorCantinaWS {
         }
     }
     
+    @WebMethod(operationName = "buscarDadosCliente")
+    public Cliente buscarDadosCliente(@WebParam(name = "cliente") Cliente cliente) {
+        return clienteRN.consultar(cliente);
+    }
+    
     @WebMethod(operationName = "enviarPedido")
     public void enviarPedido(@WebParam(name = "pedido") Pedido pedido) {
         double saldoCliente;
         double valorPedido = 0;
         
+        System.out.println("Pedido recebido de: " + pedido.getCliente().getMatricula());
+        
         saldoCliente = pedido.getCliente().getSaldo();
+        
+        System.out.println("Cliente tem o saldo de: " + saldoCliente);
         
         for (CardapioItem item : pedido.getItensPedido()) {
             valorPedido += item.getValor();
         }
         
+        System.out.println("Pedido no valor de:" + valorPedido);
+        
         if (valorPedido <= saldoCliente) {
-            int numeroPedido;
-            numeroPedido = pedidoRN.pesquisar().size() + 1;
-            pedido.setNumero(numeroPedido);
+            saldoCliente -= valorPedido;
+            pedido.getCliente().setSaldo(saldoCliente);
+            
+            clienteRN.alterar(pedido.getCliente());
             pedidoRN.salvar(pedido);
         }
+        
+        System.out.println("Saldo atual do cliente: R$" + pedido.getCliente().getSaldo());
     }
     
     @WebMethod(operationName = "solicitarPedido")
@@ -67,6 +82,11 @@ public class ServidorCantinaWS {
         pedidoRN.excluir(pedido);
         MockBancoDados.getInstance().getPedidosAguardando().add(pedido);
         return pedido;
+    }
+    
+    @WebMethod(operationName = "buscarFilaPedidos")
+    public List<Pedido> buscarFilaPedidos() {
+        return pedidoRN.pesquisar();
     }
     
     @WebMethod(operationName = "fecharPedido")

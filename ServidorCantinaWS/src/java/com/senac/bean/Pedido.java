@@ -1,6 +1,5 @@
 package com.senac.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +9,6 @@ public class Pedido {
     private List<CardapioItem> itensPedido;
 
     public Pedido() {
-        this.itensPedido = new ArrayList<>();
     }
 
     public Pedido(Integer numero, List<CardapioItem> itensPedido) {

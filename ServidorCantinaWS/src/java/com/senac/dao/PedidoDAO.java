@@ -4,6 +4,7 @@ import com.senac.bean.Pedido;
 import com.senac.crud.CrudGenerico;
 import com.senac.crud.MockBancoDados;
 import java.util.List;
+import java.util.Random;
 
 public class PedidoDAO implements CrudGenerico<Pedido> {
 
@@ -19,6 +20,7 @@ public class PedidoDAO implements CrudGenerico<Pedido> {
 
     @Override
     public Pedido salvar(Pedido bean) {
+        bean.setNumero(getNumeroPedido());
         MockBancoDados.getInstance().getPedidos().add(bean);
         return bean;
     }
@@ -32,6 +34,10 @@ public class PedidoDAO implements CrudGenerico<Pedido> {
     @Override
     public List<Pedido> pesquisar() {
         return MockBancoDados.getInstance().getPedidos();
+    }
+    
+    protected Integer getNumeroPedido() {
+        return new Random().nextInt(999999) + 1;
     }
     
 }
