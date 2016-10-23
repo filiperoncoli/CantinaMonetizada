@@ -18,7 +18,7 @@ public class MockBancoDados {
         pedidos = new ArrayList<>();
         pedidosAguardando = new ArrayList<>();
         
-        Cliente c = new Cliente(631420069, "P1234", "Filipe", 200);
+        Cliente c = new Cliente(631420069, "P1234", "Filipe", 20.00);
         clientes.add(c);
         
         CardapioItem ci1 = new CardapioItem(1, "Filé com Fritas", 17.90);
@@ -82,7 +82,7 @@ public class MockBancoDados {
     
     public Pedido getPedidoAguardando(Integer pk) {
         for (Pedido pedido : pedidosAguardando) {
-            if (pedido.equals(pk)) {
+            if (pedido.getNumero().equals(pk)) {
                 return pedido;
             }
         }
