@@ -1,17 +1,35 @@
+package com.senac.swing;
+
 
 import com.senac.ws.Pedido;
+import java.awt.Image;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 public class TerminalAtendimento extends javax.swing.JFrame {
     private Pedido pedido;
+    private static boolean habilitarBtnNextPedido;
 
     /**
      * Creates new form TerminalAtendimento
      */
     public TerminalAtendimento() {
         initComponents();
+        setLocationRelativeTo(null);
+        
+        try {
+            Image i = ImageIO.read(getClass().getResource("img/french_fries.png"));
+            setIconImage(i);
+        } catch (IOException ex) {
+            Logger.getLogger(TerminalAtendimento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        btnFinalizarPedido.setEnabled(false);
+        habilitarBtnNextPedido = true;
     }
 
     /**
@@ -31,9 +49,13 @@ public class TerminalAtendimento extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtFilaPedidos = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Atendimento");
+        setResizable(false);
 
         txtPedido.setEditable(false);
         txtPedido.setColumns(20);
@@ -69,27 +91,29 @@ public class TerminalAtendimento extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Fila de Pedidos");
 
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/senac/swing/img/fast_food.png"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnFinalizarPedido)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnNextPedido))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(btnNextPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnFinalizarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -101,40 +125,71 @@ public class TerminalAtendimento extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnNextPedido)
-                            .addComponent(btnFinalizarPedido))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnFinalizarPedido))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNextPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextPedidoActionPerformed
-        pedido = solicitarPedido();
+        try {
+            pedido = solicitarPedido();
         
-        txtPedido.append("Pedido: " + pedido.getNumero() + "\n");
-        
-        for (int i = 0; i < pedido.getItensPedido().size(); i++) {
-            txtPedido.append(pedido.getItensPedido().get(i).getCodigo() + " - " + 
-                    pedido.getItensPedido().get(i).getDescricao() + "\n");
+            txtPedido.append("Pedido: " + pedido.getNumero() + "\n");
+            btnNextPedido.setEnabled(false);
+            btnFinalizarPedido.setEnabled(true);
+            habilitarBtnNextPedido = false;
+
+            for (int i = 0; i < pedido.getItensPedido().size(); i++) {
+                txtPedido.append(pedido.getItensPedido().get(i).getCodigo() + " - " + 
+                        pedido.getItensPedido().get(i).getDescricao() + "\n");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnNextPedidoActionPerformed
 
     private void btnFinalizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarPedidoActionPerformed
-        fecharPedido(pedido.getNumero());
-        txtPedido.setText("");
+        String retorno;
+        
+        try {
+            retorno = fecharPedido(pedido.getNumero());
+            txtPedido.setText("");
+            btnFinalizarPedido.setEnabled(false);
+            btnNextPedido.setEnabled(true);
+            habilitarBtnNextPedido = true;
+            JOptionPane.showMessageDialog(this, retorno);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_btnFinalizarPedidoActionPerformed
+    
+    
     
     private static void atualizarListaPedidos() {
         List<Pedido> filaPedidos;
                 
         while (true) {
             filaPedidos = buscarFilaPedidos();
+            
+            if (!filaPedidos.isEmpty() && habilitarBtnNextPedido) {
+                btnNextPedido.setEnabled(true);
+            } else {
+                btnNextPedido.setEnabled(false);
+            }
             
             txtFilaPedidos.setText("");
 
@@ -155,6 +210,24 @@ public class TerminalAtendimento extends javax.swing.JFrame {
                 Logger.getLogger(TerminalAtendimento.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private static java.util.List<com.senac.ws.Pedido> buscarFilaPedidos() {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.buscarFilaPedidos();
+    }
+
+    private static Pedido solicitarPedido() {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.solicitarPedido();
+    }
+
+    private static String fecharPedido(java.lang.Integer numeroPedido) {
+        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
+        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
+        return port.fecharPedido(numeroPedido);
     }
     
     /**
@@ -195,32 +268,17 @@ public class TerminalAtendimento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFinalizarPedido;
-    private javax.swing.JButton btnNextPedido;
+    private static javax.swing.JButton btnFinalizarPedido;
+    private static javax.swing.JButton btnNextPedido;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private static javax.swing.JTextArea txtFilaPedidos;
     private javax.swing.JTextArea txtPedido;
     // End of variables declaration//GEN-END:variables
-
-    private static void fecharPedido(java.lang.Integer numeroPedido) {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        port.fecharPedido(numeroPedido);
-    }
-
-    private static Pedido solicitarPedido() {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        return port.solicitarPedido();
-    }
-
-    private static java.util.List<com.senac.ws.Pedido> buscarFilaPedidos() {
-        com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
-        com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
-        return port.buscarFilaPedidos();
-    }
 
 }

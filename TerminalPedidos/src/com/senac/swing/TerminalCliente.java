@@ -14,7 +14,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class TerminalCliente extends javax.swing.JFrame {
-    private Cliente cliente;
+    private String matricula;
+    private String senha;
 
     /**
      * Creates new form TerminalCliente
@@ -180,9 +181,7 @@ public class TerminalCliente extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblMensagem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblImagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,9 +197,9 @@ public class TerminalCliente extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -235,9 +234,8 @@ public class TerminalCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-        Cliente clienteRetorno;
-        String matricula = txtMatricula.getText();
-        String senha = new String(txtSenha.getPassword());
+        matricula = txtMatricula.getText();
+        senha = new String(txtSenha.getPassword());
         DefaultListModel lista = new DefaultListModel();
         List<CardapioItem> cardapio = null;
         
@@ -246,24 +244,13 @@ public class TerminalCliente extends javax.swing.JFrame {
             
             cardapio = autenticarCliente(Integer.parseInt(matricula), senha);
             
-//            CardapioItem[] cardapioVec = new CardapioItem[cardapio.size()];
-//            cardapio.toArray(cardapioVec);
-            
             for (CardapioItem item : cardapio) {
                 lista.addElement(item);
             }
 
-//            listCardapio.setListData(cardapioVec);
             listCardapio.setModel(lista);
             
-            cliente = new Cliente();
-            cliente.setMatricula(Integer.parseInt(txtMatricula.getText()));
-            cliente.setSenha(new String(txtSenha.getPassword()));
-            clienteRetorno = buscarDadosCliente(cliente);
-            cliente = clienteRetorno;
-            
-            lblMensagem.setText("Bem vindo " + cliente.getNome() + ", faça seu pedido");
-            txtMatricula.setText("");
+            lblMensagem.setText("Bem vindo " + instanciarCliente().getNome() + ", faça seu pedido");
             txtMatricula.setEnabled(false);
             txtSenha.setText("");
             txtSenha.setEnabled(false);
@@ -277,17 +264,29 @@ public class TerminalCliente extends javax.swing.JFrame {
 
     private void btnPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidoActionPerformed
         Pedido pedido = new Pedido();
+        double retorno;
+        Cliente cliente;
         
         try {
-            pedido.setCliente(cliente);
-
             List<CardapioItem> itens = listCardapio.getSelectedValuesList();
+            
+            if (itens.isEmpty()) {
+                throw new RuntimeException("Selecione ao menos um item do cardápio para fazer o pedido.");
+            }
 
             for (CardapioItem item : itens) {
                 pedido.getItensPedido().add(item);
             }
             
-            enviarPedido(pedido);
+            cliente = instanciarCliente();
+            pedido.setCliente(cliente);
+            
+            retorno = enviarPedido(pedido);
+            
+            lblMensagem.setText("");
+            lblMensagem.setText(cliente.getNome() + ", seu saldo é de R$" + retorno);
+            
+            JOptionPane.showMessageDialog(this, "Pedido enviado.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
@@ -296,6 +295,7 @@ public class TerminalCliente extends javax.swing.JFrame {
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         btnPedido.setEnabled(false);
         btnSair.setEnabled(false);
+        txtMatricula.setText("");
         txtMatricula.setEnabled(true);
         txtSenha.setEnabled(true);
         btnOk.setEnabled(true);
@@ -303,6 +303,13 @@ public class TerminalCliente extends javax.swing.JFrame {
         DefaultListModel listModel = (DefaultListModel) listCardapio.getModel();
         listModel.removeAllElements();
     }//GEN-LAST:event_btnSairActionPerformed
+    
+    private Cliente instanciarCliente() {
+        Cliente cliente = new Cliente();
+        cliente.setMatricula(Integer.parseInt(matricula));
+        cliente.setSenha(senha);
+        return buscarDadosCliente(cliente);
+    }
     
     private void consistirDados(String matricula, String senha) {
         if (matricula.equals("")) {
@@ -326,7 +333,7 @@ public class TerminalCliente extends javax.swing.JFrame {
         return port.buscarDadosCliente(cliente);
     }
 
-    private static String enviarPedido(com.senac.ws.Pedido pedido) {
+    private static double enviarPedido(com.senac.ws.Pedido pedido) {
         com.senac.ws.ServidorCantinaWS_Service service = new com.senac.ws.ServidorCantinaWS_Service();
         com.senac.ws.ServidorCantinaWS port = service.getServidorCantinaWSPort();
         return port.enviarPedido(pedido);
@@ -362,7 +369,9 @@ public class TerminalCliente extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+          
+    
+      public void run() {
                 new TerminalCliente().setVisible(true);
             }
         });
